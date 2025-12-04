@@ -1,0 +1,24 @@
+#! /bin/sh
+
+bspc monitor -d I II III IV V
+
+# Window behavior
+bspc config border_width         2
+bspc config window_gap           10
+bspc config split_ratio          0.52
+bspc config borderless_monocle   true
+bspc config gapless_monocle      true
+
+# Rounded corners (with picom)
+bspc config normal_border_color  "#555555"
+bspc config focused_border_color "#FF6E48"
+
+# Start services
+pkill picom
+picom --experimental-backends --config ~/.config/picom/picom.conf &
+
+# Wallpaper
+feh --bg-scale ~/Pictures/wall.jpg &
+
+# Autostart panel
+$HOME/.config/polybar/launch.sh &
