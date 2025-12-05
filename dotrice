@@ -13,15 +13,19 @@ logo() {
 }
 
 initial_checks() {
-    # Verificar usuario root
+    # Check if running as root
     if [ "$(id -u)" = 0 ]; then
-        printf "This script MUST NOT be run as root user.\n"
+        printf "${BLD}${CRE}This script MUST NOT be run as root user.${CNC}\n"
+        printf "${BLD}${CYE}Run it as your normal user. sudo will be used when needed.${CNC}\n"
         exit 1
     fi
 
-    # Verificar directorio HOME
+    # Check if in HOME directory
     if [ "$PWD" != "$HOME" ]; then
-        printf "The script must be executed from HOME directory.\n"
+        printf "${BLD}${CRE}This script must be executed from your HOME directory.${CNC}\n"
+        printf "${BLD}${CYE}Current directory: ${PWD}${CNC}\n"
+        printf "${BLD}${CYE}HOME directory: ${HOME}${CNC}\n"
+        printf "\n${BLD}${CGR}Run: cd && ./gh0stzk-dotfiles-gentoo.sh${CNC}\n"
         exit 1
     fi
 }
@@ -93,11 +97,33 @@ install_dependencies() {
     # Gentoo package equivalents
     dependencies="x11-terms/alacritty sys-apps/bat x11-wm/bspwm x11-misc/dunst sys-apps/eza media-gfx/feh app-shells/fzf x11-misc/xfce4-thunar www-client/firefox app-editors/geany dev-vcs/git media-gfx/imagemagick app-misc/jq x11-terms/kitty media-libs/libwebp media-gfx/maim media-sound/mpc media-sound/mpd media-video/mpv app-editors/neovim media-sound/ncmpcpp net-libs/nodejs media-sound/pulseaudio-ctl x11-themes/papirus-icon-theme x11-misc/picom media-sound/playerctl x11-misc/polybar x11-misc/redshift x11-misc/rofi x11-misc/sxhkd x11-misc/xclip x11-misc/xdg-user-dirs x11-misc/xdotool x11-apps/xsetroot app-misc/yazi app-shells/zsh app-shells/zsh-completions"
 
+    to_install=""
+    already_installed=""
     failed_deps=""
     retry_failed=""
 
-    # First pass
+    # Check which packages are already installed
+    printf "\n%b\n" "${BLD}${CYE}Checking installed packages...${CNC}"
     for pkg in $dependencies; do
+        if qlist -I "$pkg" >/dev/null 2>&1 || equery list "$pkg" >/dev/null 2>&1; then
+            already_installed="$already_installed $pkg"
+            printf "%b\n" "${BLD}${CGR}[✓]${CNC} ${pkg} ${BLD}${CGR}already installed${CNC}"
+        else
+            to_install="$to_install $pkg"
+            printf "%b\n" "${BLD}${CYE}[ ]${CNC} ${pkg} ${BLD}${CYE}needs installation${CNC}"
+        fi
+    done
+
+    if [ -z "$to_install" ]; then
+        printf "\n%b\n" "${BLD}${CGR}All dependencies are already installed!${CNC}"
+        sleep 3
+        return
+    fi
+
+    printf "\n%b\n" "${BLD}${CYE}Installing missing packages...${CNC}"
+    
+    # First pass - only install what's missing
+    for pkg in $to_install; do
         printf "%b\n" "${BLD}${CYE}Installing ${CBL}${pkg}${CNC}"
         if ! sudo emerge --ask=n --quiet-build=y "$pkg"; then
             failed_deps="$failed_deps $pkg"
@@ -134,12 +160,31 @@ install_fonts() {
 
     fonts="media-fonts/inconsolata media-fonts/jetbrains-mono media-fonts/terminus-font media-fonts/nerd-fonts"
 
+    to_install=""
+    
+    # Check which fonts are already installed
     for font in $fonts; do
+        if qlist -I "$font" >/dev/null 2>&1 || equery list "$font" >/dev/null 2>&1; then
+            printf "%b\n" "${BLD}${CGR}[✓]${CNC} ${font} ${BLD}${CGR}already installed${CNC}"
+        else
+            to_install="$to_install $font"
+            printf "%b\n" "${BLD}${CYE}[ ]${CNC} ${font} ${BLD}${CYE}needs installation${CNC}"
+        fi
+    done
+
+    if [ -z "$to_install" ]; then
+        printf "\n%b\n" "${BLD}${CGR}All fonts are already installed!${CNC}"
+        sleep 2
+        return
+    fi
+
+    printf "\n%b\n" "${BLD}${CYE}Installing missing fonts...${CNC}"
+    for font in $to_install; do
         printf "%b\n" "${BLD}${CYE}Installing ${CBL}${font}${CNC}"
         sudo emerge --ask=n --quiet-build=y "$font" || true
     done
 
-    printf "\n%b\n" "${BLD}${CGR}Fonts installed!${CNC}"
+    printf "\n%b\n" "${BLD}${CGR}Fonts installation complete!${CNC}"
     sleep 2
 }
 
@@ -151,10 +196,28 @@ install_additional_packages() {
     # These might need manual installation or overlays
     additional="media-sound/mpd media-plugins/mpd-discord-rpc"
 
-    printf "%b\n" "${BLD}${CYE}Installing additional packages...${CNC}"
+    to_install=""
+    
+    # Check which packages are already installed
+    for pkg in $additional; do
+        if qlist -I "$pkg" >/dev/null 2>&1 || equery list "$pkg" >/dev/null 2>&1; then
+            printf "%b\n" "${BLD}${CGR}[✓]${CNC} ${pkg} ${BLD}${CGR}already installed${CNC}"
+        else
+            to_install="$to_install $pkg"
+            printf "%b\n" "${BLD}${CYE}[ ]${CNC} ${pkg} ${BLD}${CYE}needs installation${CNC}"
+        fi
+    done
+
+    if [ -z "$to_install" ]; then
+        printf "\n%b\n" "${BLD}${CGR}All additional packages are already installed!${CNC}"
+        sleep 2
+        return
+    fi
+
+    printf "\n%b\n" "${BLD}${CYE}Installing additional packages...${CNC}"
     printf "%b\n" "${BLD}${CYE}Note: Some of these may take a while to compile${CNC}"
 
-    for pkg in $additional; do
+    for pkg in $to_install; do
         sudo emerge --ask=n --quiet-build=y "$pkg" 2>/dev/null || \
             printf "%b\n" "${BLD}${CRE}Could not install ${pkg} - may need manual installation${CNC}"
     done
