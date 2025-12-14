@@ -1,0 +1,174 @@
+;; Ben 10 EWW Config - Omnitrix Interface
+;; ~/.config/eww/ben10/eww.yuck
+
+;; Variables - Omnitrix readings
+(defpoll time :interval "1s"
+  "date '+%H:%M:%S'")
+
+(defpoll date :interval "60s"
+  "date '+%A, %B %d'")
+
+(defpoll cpu_usage :interval "2s"
+  "top -bn1 | grep 'Cpu(s)' | awk '{print $2}' | cut -d'%' -f1")
+
+(defpoll memory :interval "2s"
+  "free | grep Mem | awk '{print int($3/$2 * 100)}'")
+
+(defpoll battery :interval "15s"
+  "cat /sys/class/power_supply/BAT0/capacity 2>/dev/null || echo 100")
+
+(defpoll uptime :interval "60s"
+  "uptime -p | sed 's/up //'")
+
+;; Main Bar - Omnitrix display
+(defwindow ben10-bar
+  :monitor 0
+  :windowtype "dock"
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "100%"
+                      :height "35px"
+                      :anchor "top center")
+  :reserve (struts :side "top" :distance "35px")
+  :stacking "fg"
+  :exclusive true
+  (omnitrix-bar))
+
+;; Bar Layout - Alien tech interface
+(defwidget omnitrix-bar []
+  (centerbox :class "omnitrix-bar"
+    (box :class "left-section"
+         :halign "start"
+         :spacing 15
+         :space-evenly false
+      (omnitrix-dial)
+      (alien-status))
+    
+    (box :class "center-section"
+         :halign "center"
+      (time-display))
+    
+    (box :class "right-section"
+         :halign "end"
+         :spacing 15
+         :space-evenly false
+      (dna-monitor)
+      (transform-button))))
+
+;; Omnitrix dial - Workspace selector
+(defwidget omnitrix-dial []
+  (box :class "omnitrix-dial"
+       :spacing 3
+    (for ws in '["1","2","3","4","5","6","7","8","9","10"]'
+      (button :class "alien-icon alien-active"
+              :onclick "echo 'Workspace ${ws}'"
+              :tooltip "Alien ${ws}"
+        "◆"))))
+
+;; Current alien/window status
+(defwidget alien-status []
+  (box :class "alien-status"
+    (label :class "status-icon" :text "▶")
+    (label :class "status-text" 
+           :text "Omnitrix Ready"
+           :limit-width 40)))
+
+;; Time display - Omnitrix clock
+(defwidget time-display []
+  (box :class "time-display"
+       :orientation "v"
+       :spacing 2
+    (label :class "time-main" :text "${time}")
+    (label :class "time-date" :text "${date}")))
+
+;; DNA/System monitor
+(defwidget dna-monitor []
+  (box :class "dna-monitor"
+       :spacing 12
+    ;; CPU strand
+    (box :class "dna-strand cpu-strand"
+         :orientation "v"
+         :spacing 2
+         :tooltip "CPU: ${cpu_usage}%"
+      (label :class "strand-label" :text "CPU")
+      (box :class "hexagon-container"
+        (for i in '["1","2","3","4","5"]'
+          (label :class {cpu_usage > 20 * i ? "hexagon hex-active" : "hexagon hex-inactive"}
+                 :text "⬡"))))
+    
+    ;; Memory strand
+    (box :class "dna-strand mem-strand"
+         :orientation "v"
+         :spacing 2
+         :tooltip "Memory: ${memory}%"
+      (label :class "strand-label" :text "RAM")
+      (box :class "hexagon-container"
+        (for i in '["1","2","3","4","5"]'
+          (label :class {memory > 20 * i ? "hexagon hex-active" : "hexagon hex-inactive"}
+                 :text "⬡"))))
+    
+    ;; Battery strand
+    (box :class "dna-strand bat-strand"
+         :orientation "v"
+         :spacing 2
+         :tooltip "Battery: ${battery}%"
+         :visible {battery != "100"}
+      (label :class "strand-label" :text "PWR")
+      (box :class "hexagon-container"
+        (for i in '["1","2","3","4","5"]'
+          (label :class {battery > 20 * i ? "hexagon hex-active" : "hexagon hex-inactive"}
+                 :text "⬡"))))))
+
+;; Transform button - Power menu
+(defwidget transform-button []
+  (button :class "transform-btn"
+          :onclick "eww open omnitrix-menu"
+          :tooltip "Transform!"
+    "⬢"))
+
+;; Omnitrix Menu Window
+(defwindow omnitrix-menu
+  :monitor 0
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "400px"
+                      :height "300px"
+                      :anchor "center")
+  :stacking "overlay"
+  (omnitrix-menu-content))
+
+(defwidget omnitrix-menu-content []
+  (box :class "omnitrix-menu"
+       :orientation "v"
+       :spacing 15
+       :space-evenly false
+    (label :class "menu-title" :text "⬢ OMNITRIX INTERFACE ⬢")
+    
+    (box :class "menu-stats"
+         :orientation "v"
+         :spacing 8
+      (box :class "stat-row"
+        (label :text "UPTIME:")
+        (label :text "${uptime}"))
+      (box :class "stat-row"
+        (label :text "CPU POWER:")
+        (label :text "${cpu_usage}%"))
+      (box :class "stat-row"
+        (label :text "MEMORY:")
+        (label :text "${memory}%")))
+    
+    (box :class "menu-actions"
+         :orientation "v"
+         :spacing 8
+      (button :class "action-btn shutdown"
+              :onclick "poweroff"
+        "⬢ POWER DOWN")
+      (button :class "action-btn reboot"
+              :onclick "reboot"
+        "⬢ REBOOT SYSTEM")
+      (button :class "action-btn lock"
+              :onclick "swaylock -f -c 0D1B0D && eww close omnitrix-menu"
+        "⬢ LOCK DEVICE")
+      (button :class "action-btn cancel"
+              :onclick "eww close omnitrix-menu"
+        "⬢ CANCEL"))))
