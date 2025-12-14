@@ -1,0 +1,195 @@
+/* Dragon Ball Z Theme - Super Saiyan Energy */
+/* ~/.config/eww/eww.scss */
+
+* {
+  all: unset;
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 13px;
+}
+
+/* Main bar - Scouter display */
+.bar {
+  background: linear-gradient(to bottom, 
+    rgba(10, 14, 39, 0.95),
+    rgba(26, 29, 58, 0.95));
+  border-bottom: 2px solid #FFD700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+/* Workspaces - Dragon Balls */
+.workspaces {
+  padding: 0 10px;
+}
+
+.ws-btn {
+  padding: 4px 8px;
+  margin: 0 2px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 16px;
+}
+
+.ws-active {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #0a0e27;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.8),
+              inset 0 0 10px rgba(255, 255, 255, 0.3);
+  transform: scale(1.2);
+}
+
+.ws-inactive {
+  background: rgba(255, 215, 0, 0.1);
+  color: #FFD700;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.ws-inactive:hover {
+  background: rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  transform: scale(1.1);
+}
+
+/* Window info - Current battle */
+.window-info {
+  padding: 5px 15px;
+  background: rgba(65, 105, 225, 0.2);
+  border-radius: 8px;
+  color: #00BFFF;
+  border: 1px solid rgba(0, 191, 255, 0.3);
+  margin-left: 10px;
+}
+
+/* DateTime - Saiyan clock */
+.datetime {
+  padding: 5px 15px;
+  background: linear-gradient(90deg,
+    rgba(255, 215, 0, 0.1),
+    rgba(255, 165, 0, 0.1));
+  border-radius: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.time {
+  color: #FFD700;
+  font-weight: bold;
+  font-size: 14px;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+
+.date {
+  color: #FFA500;
+  font-size: 12px;
+}
+
+/* Power Level Metrics */
+.power-level {
+  padding: 0 15px;
+}
+
+.metric {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.metric label {
+  font-size: 14px;
+}
+
+/* Progress bars - Energy charging */
+progress {
+  min-width: 60px;
+  min-height: 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.cpu-bar::-webkit-progress-value,
+.cpu-bar progress::-moz-progress-bar {
+  background: linear-gradient(90deg, #FF4500, #FFD700);
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(255, 69, 0, 0.8);
+}
+
+.mem-bar::-webkit-progress-value,
+.mem-bar progress::-moz-progress-bar {
+  background: linear-gradient(90deg, #00BFFF, #4169E1);
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 191, 255, 0.8);
+}
+
+.bat-bar::-webkit-progress-value,
+.bat-bar progress::-moz-progress-bar {
+  background: linear-gradient(90deg, #32CD32, #FFD700);
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(50, 205, 50, 0.8);
+}
+
+/* Power button */
+.power-btn {
+  padding: 5px 12px;
+  background: linear-gradient(135deg, #FF4500, #DC143C);
+  color: white;
+  border-radius: 6px;
+  font-size: 16px;
+  border: 1px solid rgba(255, 69, 0, 0.5);
+  box-shadow: 0 0 15px rgba(255, 69, 0, 0.5);
+  margin-right: 10px;
+  transition: all 0.2s ease;
+}
+
+.power-btn:hover {
+  box-shadow: 0 0 25px rgba(255, 69, 0, 0.9);
+  transform: scale(1.1);
+}
+
+/* Power Menu - Shenron */
+.power-menu {
+  background: linear-gradient(135deg,
+    rgba(10, 14, 39, 0.98),
+    rgba(26, 29, 58, 0.98));
+  border: 3px solid #FFD700;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 0 50px rgba(255, 215, 0, 0.6),
+              inset 0 0 30px rgba(0, 191, 255, 0.1);
+}
+
+.power-title {
+  color: #FFD700;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 1);
+  margin-bottom: 15px;
+}
+
+.power-option {
+  padding: 12px 20px;
+  margin: 5px 0;
+  background: linear-gradient(90deg,
+    rgba(255, 215, 0, 0.1),
+    rgba(255, 165, 0, 0.1));
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 8px;
+  color: #FFD700;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.power-option:hover {
+  background: linear-gradient(90deg,
+    rgba(255, 215, 0, 0.3),
+    rgba(255, 165, 0, 0.3));
+  border-color: #FFD700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+  transform: translateX(5px);
+}
+
+/* Systray */
+.systray {
+  padding: 0 10px;
+}
