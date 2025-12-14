@@ -1,0 +1,142 @@
+;; Dragon Ball Z EWW Config - Power Level Interface
+;; ~/.config/eww/dbz/eww.yuck
+
+;; Variables - Power readings
+(defpoll time :interval "1s"
+  "date '+%H:%M'")
+
+(defpoll date :interval "60s"
+  "date '+%a, %b %d'")
+
+(defpoll cpu_usage :interval "2s"
+  "top -bn1 | grep 'Cpu(s)' | awk '{print $2}' | cut -d'%' -f1")
+
+(defpoll memory :interval "2s"
+  "free | grep Mem | awk '{print int($3/$2 * 100)}'")
+
+(defpoll battery :interval "15s"
+  "cat /sys/class/power_supply/BAT0/capacity 2>/dev/null || echo 100")
+
+(defpoll battery_status :interval "15s"
+  "cat /sys/class/power_supply/BAT0/status 2>/dev/null || echo 'Full'")
+
+;; Main Bar Window
+(defwindow dbz-bar
+  :monitor 0
+  :windowtype "dock"
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "100%"
+                      :height "30px"
+                      :anchor "top center")
+  :reserve (struts :side "top" :distance "30px")
+  :stacking "fg"
+  :exclusive true
+  (bar))
+
+;; Bar Layout - Scouter readout style
+(defwidget bar []
+  (centerbox :class "bar"
+    (box :class "left-modules"
+         :halign "start"
+         :spacing 10
+         :space-evenly false
+      (workspaces)
+      (window-info))
+    
+    (box :class "center-modules"
+         :halign "center"
+      (date-time))
+    
+    (box :class "right-modules"
+         :halign "end"
+         :spacing 10
+         :space-evenly false
+      (power-level)
+      (power-button))))
+
+;; Workspace - Dragon Balls indicator
+(defwidget workspaces []
+  (box :class "workspaces"
+       :spacing 5
+    (for ws in '["1","2","3","4","5","6","7"]'
+      (button :class "ws-btn ws-active"
+              :onclick "echo 'Workspace ${ws}'"
+        "⭐"))))
+
+;; Window title - Current battle
+(defwidget window-info []
+  (box :class "window-info"
+    (label :text "🔥 Dragon Ball Universe"
+           :limit-width 50)))
+
+;; Date/Time - Saiyan clock
+(defwidget date-time []
+  (box :class "datetime"
+       :spacing 10
+    (label :class "time" :text "⚡ ${time}")
+    (label :class "date" :text "${date}")))
+
+;; Power Level Monitor (CPU/RAM)
+(defwidget power-level []
+  (box :class "power-level"
+       :spacing 15
+    (box :class "metric cpu"
+         :spacing 5
+         :tooltip "CPU Power: ${cpu_usage}%"
+      (label :text "🔥")
+      (progress :class "cpu-bar"
+                :value cpu_usage
+                :orientation "h"))
+    
+    (box :class "metric memory"
+         :spacing 5
+         :tooltip "Ki Energy: ${memory}%"
+      (label :text "💫")
+      (progress :class "mem-bar"
+                :value memory
+                :orientation "h"))
+    
+    (box :class "metric battery"
+         :spacing 5
+         :tooltip "Battery: ${battery}% (${battery_status})"
+         :visible {battery != "100" || battery_status != "Full"}
+      (label :text {battery_status == "Charging" ? "⚡" : "🔋"})
+      (progress :class "bat-bar"
+                :value battery
+                :orientation "h"))))
+
+;; Power menu button
+(defwidget power-button []
+  (button :class "power-btn"
+          :onclick "eww open power-menu || rofi -show power-menu"
+    "⭕"))
+
+;; Power Menu Window (Shenron wishes)
+(defwindow power-menu
+  :monitor 0
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "300px"
+                      :height "200px"
+                      :anchor "center")
+  :stacking "overlay"
+  (power-menu-content))
+
+(defwidget power-menu-content []
+  (box :class "power-menu"
+       :orientation "v"
+       :spacing 10
+       :space-evenly false
+    (label :class "power-title" :text "🐉 SHENRON'S WISHES")
+    (box :orientation "v"
+         :spacing 5
+      (button :class "power-option" 
+              :onclick "poweroff"
+        "💀 Power Down")
+      (button :class "power-option"
+              :onclick "reboot"
+        "♻️  Reboot")
+      (button :class "power-option"
+              :onclick "eww close power-menu"
+        "❌ Cancel"))))
