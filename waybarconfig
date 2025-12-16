@@ -1,0 +1,139 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 34,
+    "spacing": 10,
+    "margin-top": 0,
+    "margin-bottom": 0,
+    "margin-left": 0,
+    "margin-right": 0,
+    
+    "modules-left": ["hyprland/workspaces", "hyprland/window"],
+    "modules-center": ["clock"],
+    "modules-right": ["pulseaudio", "network", "cpu", "memory", "battery", "tray"],
+    
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "on-click": "activate",
+        "format-icons": {
+            "1": "🌴",
+            "2": "🌊",
+            "3": "🌆",
+            "4": "🚗",
+            "5": "🎮",
+            "6": "🎵",
+            "7": "💾",
+            "8": "🔥",
+            "9": "⚡",
+            "10": "🌟",
+            "urgent": "⚠",
+            "active": "●",
+            "default": "○"
+        },
+        "persistent-workspaces": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": [],
+            "5": [],
+            "6": []
+        },
+        "all-outputs": true,
+        "disable-scroll": false,
+        "on-scroll-up": "hyprctl dispatch workspace e+1",
+        "on-scroll-down": "hyprctl dispatch workspace e-1"
+    },
+    
+    "hyprland/window": {
+        "format": "{}",
+        "max-length": 50,
+        "separate-outputs": true,
+        "rewrite": {
+            "": "🌴 Vice City Desktop"
+        }
+    },
+    
+    "tray": {
+        "icon-size": 18,
+        "spacing": 12
+    },
+    
+    "clock": {
+        "format": "🌴 {:%H:%M:%S}",
+        "format-alt": "🌴 {:%A, %B %d • %H:%M:%S}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "interval": 1,
+        "calendar": {
+            "mode": "month",
+            "mode-mon-col": 3,
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "format": {
+                "months": "<span color='#FF006E'><b>{}</b></span>",
+                "days": "<span color='#E0B0FF'><b>{}</b></span>",
+                "weeks": "<span color='#00F0FF'><b>W{}</b></span>",
+                "weekdays": "<span color='#BD00FF'><b>{}</b></span>",
+                "today": "<span color='#FF006E' background='#1a0a2e'><b><u>{}</u></b></span>"
+            }
+        }
+    },
+    
+    "cpu": {
+        "format": "🔥 {usage}%",
+        "tooltip": true,
+        "interval": 2,
+        "on-click": "kitty -e htop"
+    },
+    
+    "memory": {
+        "format": "💾 {}%",
+        "interval": 2,
+        "tooltip-format": "RAM: {used:0.1f}G / {total:0.1f}G\nSwap: {swapUsed:0.1f}G / {swapTotal:0.1f}G",
+        "on-click": "kitty -e htop"
+    },
+    
+    "battery": {
+        "states": {
+            "good": 80,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "⚡ {capacity}%",
+        "format-plugged": "🔌 {capacity}%",
+        "format-alt": "{icon} {time}",
+        "format-icons": ["", "", "", "", ""],
+        "tooltip-format": "{timeTo}, {capacity}%"
+    },
+    
+    "network": {
+        "format-wifi": "📡 {essid}",
+        "format-ethernet": "🌐 {ipaddr}/{cidr}",
+        "format-linked": "🌐 No IP",
+        "format-disconnected": "⚠ Offline",
+        "tooltip-format": "{ifname} via {gwaddr}",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}/{cidr}\n⬇ {bandwidthDownBits} ⬆ {bandwidthUpBits}",
+        "tooltip-format-ethernet": "{ifname}\n{ipaddr}/{cidr}\n⬇ {bandwidthDownBits} ⬆ {bandwidthUpBits}",
+        "interval": 3,
+        "on-click": "kitty -e nmtui"
+    },
+    
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-bluetooth-muted": "🔇 {icon}",
+        "format-muted": "🔇",
+        "format-icons": {
+            "headphone": "🎧",
+            "hands-free": "🎧",
+            "headset": "🎧",
+            "phone": "📱",
+            "portable": "📱",
+            "car": "🚗",
+            "default": ["🔊", "🔊", "🔊"]
+        },
+        "on-click": "pavucontrol",
+        "scroll-step": 5,
+        "tooltip-format": "{desc}\n{volume}%"
+    }
+}
