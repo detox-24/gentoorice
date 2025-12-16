@@ -1,0 +1,48 @@
+# ~/.config/mako/config
+# Vice City Synthwave Theme 🌴
+
+font=JetBrains Mono 11
+background-color=#0f0520ee
+text-color=#FF006E
+border-color=#FF006E
+border-size=3
+border-radius=12
+padding=16
+margin=12
+default-timeout=5000
+ignore-timeout=0
+
+# Neon glow effect
+width=350
+height=150
+icon-path=/usr/share/icons/Papirus-Dark
+
+# Colors for different urgency levels
+[urgency=low]
+background-color=#1a0a2eee
+border-color=#BD00FF
+text-color=#BD00FF
+
+[urgency=normal]
+background-color=#0f0520ee
+border-color=#FF006E
+text-color=#FF006E
+
+[urgency=high]
+background-color=#2d0a3cee
+border-color=#FF006E
+text-color=#00F0FF
+default-timeout=0
+
+[urgency=critical]
+background-color=#3d0a46ee
+border-color=#FF6B35
+text-color=#FF6B35
+default-timeout=0
+
+# App-specific rules
+[app-name="Spotify"]
+border-color=#39FF14
+
+[app-name="Discord"]
+border-color=#00F0FF
