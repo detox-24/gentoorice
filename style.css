@@ -1,0 +1,181 @@
+/* ~/.config/waybar/style.css */
+/* Vice City Synthwave Theme 🌴 */
+
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "JetBrains Mono", "Noto Sans CJK JP";
+    font-size: 13px;
+    min-height: 0;
+}
+
+window#waybar {
+    background: linear-gradient(90deg, rgba(26, 10, 46, 0.95) 0%, rgba(45, 10, 60, 0.95) 100%);
+    color: #FF006E;
+    border-bottom: 2px solid;
+    border-image: linear-gradient(90deg, #FF006E, #00F0FF, #BD00FF) 1;
+}
+
+tooltip {
+    background: rgba(26, 10, 46, 0.98);
+    border: 2px solid #FF006E;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(255, 0, 110, 0.5);
+}
+
+tooltip label {
+    color: #00F0FF;
+}
+
+#workspaces button {
+    padding: 0 10px;
+    color: #BD00FF;
+    background: transparent;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+#workspaces button.active {
+    color: #FF006E;
+    background: linear-gradient(180deg, rgba(255, 0, 110, 0.2) 0%, transparent 100%);
+    border-bottom: 3px solid #FF006E;
+    box-shadow: 0 0 15px rgba(255, 0, 110, 0.6);
+    animation: neonPulse 2s ease-in-out infinite;
+}
+
+#workspaces button.urgent {
+    color: #FF4500;
+    border-bottom: 3px solid #FF4500;
+    animation: urgentBlink 1s ease-in-out infinite;
+}
+
+#workspaces button:hover {
+    background: linear-gradient(180deg, rgba(0, 240, 255, 0.2) 0%, transparent 100%);
+    border-bottom: 3px solid #00F0FF;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+@keyframes neonPulse {
+    0%, 100% {
+        text-shadow: 0 0 5px #FF006E, 0 0 10px #FF006E;
+    }
+    50% {
+        text-shadow: 0 0 10px #FF006E, 0 0 20px #FF006E, 0 0 30px #FF006E;
+    }
+}
+
+@keyframes urgentBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+#window {
+    margin: 0 10px;
+    color: #00F0FF;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
+}
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#network,
+#pulseaudio,
+#tray {
+    padding: 0 14px;
+    margin: 0 3px;
+    background: linear-gradient(135deg, rgba(189, 0, 255, 0.3) 0%, rgba(255, 0, 110, 0.3) 100%);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 0, 110, 0.4);
+    box-shadow: 0 0 10px rgba(255, 0, 110, 0.3);
+}
+
+#clock {
+    color: #FF006E;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(255, 0, 110, 0.8);
+    background: linear-gradient(135deg, rgba(255, 0, 110, 0.4) 0%, rgba(189, 0, 255, 0.4) 100%);
+    border: 1px solid #FF006E;
+}
+
+#battery {
+    color: #00F0FF;
+}
+
+#battery.charging {
+    color: #39FF14;
+    animation: chargePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes chargePulse {
+    0%, 100% {
+        text-shadow: 0 0 5px #39FF14;
+    }
+    50% {
+        text-shadow: 0 0 15px #39FF14, 0 0 25px #39FF14;
+    }
+}
+
+#battery.warning:not(.charging) {
+    color: #FF6B35;
+    text-shadow: 0 0 10px #FF6B35;
+}
+
+#battery.critical:not(.charging) {
+    color: #FF006E;
+    animation: criticalBlink 0.5s ease-in-out infinite;
+}
+
+@keyframes criticalBlink {
+    0%, 100% {
+        text-shadow: 0 0 10px #FF006E, 0 0 20px #FF006E;
+    }
+    50% {
+        text-shadow: 0 0 5px #FF006E;
+    }
+}
+
+#cpu {
+    color: #FF6B35;
+    text-shadow: 0 0 8px rgba(255, 107, 53, 0.6);
+}
+
+#memory {
+    color: #BD00FF;
+    text-shadow: 0 0 8px rgba(189, 0, 255, 0.6);
+}
+
+#network {
+    color: #00F0FF;
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+}
+
+#network.disconnected {
+    color: #4A4A4A;
+    text-shadow: none;
+}
+
+#pulseaudio {
+    color: #FF006E;
+    text-shadow: 0 0 8px rgba(255, 0, 110, 0.6);
+}
+
+#pulseaudio.muted {
+    color: #4A4A4A;
+    text-shadow: none;
+}
+
+#tray {
+    padding: 0 10px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background: linear-gradient(135deg, rgba(255, 0, 110, 0.5) 0%, rgba(255, 107, 53, 0.5) 100%);
+    animation: neonPulse 1s ease-in-out infinite;
+}
