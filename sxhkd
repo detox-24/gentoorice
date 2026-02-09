@@ -1,17 +1,35 @@
+# Terminal
 super + Return
-    kitty
+    st
 
+# Launcher
 super + d
     rofi -show drun
 
-super + q
-    bspc node -close
+# Quit/reload bspwm
+super + shift + {q,r}
+    bspc {quit,wm -r}
 
-super + {h,j,k,l}
-    bspc node -focus {west,south,north,east}
+# Close window
+super + shift + c
+    bspc node -c
 
-super + shift + {h,j,k,l}
-    bspc node -swap {west,south,north,east}
+# Focus/move windows
+super + {_,shift + }{h,j,k,l}
+    bspc node -{f,s} {west,south,north,east}
 
-super + space
-    bspc node -toggle floating
+# Switch desktops
+super + {1-9}
+    bspc desktop -f '^{1-9}'
+
+# Move window to desktop
+super + shift + {1-9}
+    bspc node -d '^{1-9}'
+
+# Toggle floating
+super + shift + space
+    bspc node -t ~floating
+
+# Toggle fullscreen
+super + f
+    bspc node -t ~fullscreen
